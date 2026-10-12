@@ -68,7 +68,7 @@ int main(void) {
 				}
 				timer_seconds++;
 			} else {
-				// After 10 seconds: keep LED2 on
+				// After 10 ON cycles: keep LED2 ON until button reset
 				PORTB |= (1 << LED2_PIN);
 			}
 		}
