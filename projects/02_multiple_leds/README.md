@@ -34,13 +34,13 @@ make
 6. In main window: File → Load Hex → select main.hex
 7. Tools → Arduino Bootloader
 8. Click Run button
-9. LEDs will display running lights pattern, then binary counter (0-15)
+9. LEDs will display running lights pattern (LED0→LED1→LED2→LED3), then binary counter (0-15)
 
 ## Code Explanation
 
 ### Setting Multiple Output Pins
 ```c
-DDRB |= (1 << LED1) | (1 << LED2) | (1 << LED3) | (1 << LED4);
+DDRB |= (1 << LED0) | (1 << LED1) | (1 << LED2) | (1 << LED3);
 ```
 - Sets bits 0, 1, 2, 3 of DDRB simultaneously
 - Uses bitwise OR to combine multiple bit masks
@@ -48,16 +48,18 @@ DDRB |= (1 << LED1) | (1 << LED2) | (1 << LED3) | (1 << LED4);
 
 ### Pattern 1: Running Lights
 ```c
-for (uint8_t i = 0; i < 4; i++) {
-    PORTB = (1 << i);
-    _delay_ms(200);
-}
+PORTB = (1 << LED0);
+_delay_ms(200);
+PORTB = (1 << LED1);
+_delay_ms(200);
+PORTB = (1 << LED2);
+_delay_ms(200);
+PORTB = (1 << LED3);
+_delay_ms(200);
 ```
-- Creates a wave pattern by shifting a single bit
-- `(1 << 0)` = 0b00000001 (LED1)
-- `(1 << 1)` = 0b00000010 (LED2)
-- `(1 << 2)` = 0b00000100 (LED3)
-- `(1 << 3)` = 0b00001000 (LED4)
+- Creates a wave pattern by setting each LED individually
+- Uses direct register assignment for each step
+- 200ms delay between each LED
 
 ### Pattern 2: Binary Counter
 ```c
@@ -68,8 +70,9 @@ for (uint8_t i = 0; i < 16; i++) {
 ```
 - Counts from 0 to 15 in binary
 - LEDs represent binary digits (0 = off, 1 = on)
-- Example: value 5 = 0b0101 → LED1 on, LED2 off, LED3 on, LED4 off
+- Example: value 5 = 0b0101 → LED0 on, LED1 off, LED2 on, LED3 off
 - Demonstrates direct register assignment
+- 500ms delay between each count
 
 ### Direct Assignment vs Bitwise Operations
 ```c
@@ -84,11 +87,11 @@ PORTB = 0b00000100;    // Set all bits to specific value
 ## Learnings
 
 - Multiple pins can be configured in one operation using bitwise OR
-- LED patterns can be created by shifting bits
+- LED patterns can be created by direct assignment (running lights) or counting (binary)
 - Binary numbers are directly represented by register values
 - Direct register assignment (PORTB = value) sets all bits at once
 - Each bit in a byte represents a distinct hardware state
-- Running lights pattern teaches bit shifting
+- Running lights pattern demonstrates sequential LED activation
 - Binary counter demonstrates the relationship between numbers and binary representation
 - Arduino Uno Port B pins: PB0=D8, PB1=D9, PB2=D10, PB3=D11, PB5=D13
 
@@ -101,14 +104,14 @@ PORTB = 0b00000100;    // Set all bits to specific value
 ### LEDs not changing
 - Ensure Tools → Arduino Bootloader was run
 - Check simulation is running
-- Verify code has both patterns uncommented
+- Verify code has both patterns present
 
 ### Pattern too fast/slow
 - Adjust _delay_ms() values
 - 200ms for running lights, 500ms for binary counter
 
 ### Understanding the binary counter
-- LED1 = least significant bit (bit 0)
-- LED4 = most significant bit (bit 3)
+- LED0 = least significant bit (bit 0)
+- LED3 = most significant bit (bit 3)
 - Value 0 = all LEDs off
 - Value 15 = all LEDs on (0b1111 = 15)

@@ -16,6 +16,7 @@ Implement a traffic light controller with pedestrian button using state machines
 - Separation of output setting from state transition logic
 - Fixed-interval loop design (100ms ticks)
 - Timer expiration handling
+- Use of helper macros from common/avr_io.h
 
 ## How to Build
 ```bash
@@ -128,6 +129,15 @@ _delay_ms(100);
 - 100ms interval = 10 Hz loop rate
 - Makes timer values predictable (e.g., 50 = 5 seconds)
 
+### Helper Macros
+```c
+CLEAR_BIT(DDRD, BUTTON_PIN);
+SET_BIT(PORTD, BUTTON_PIN);
+```
+- Uses macros from common/avr_io.h
+- CLEAR_BIT and SET_BIT are convenience macros for bit manipulation
+- BUTTON_PIN is defined in common/avr_io.h as PD2
+
 ## State Flow
 
 **Normal cycle (no button press)**:
@@ -156,6 +166,7 @@ Button press during GREEN or YELLOW is remembered and acted upon during RED phas
 - Pedestrian request flag persists across state changes
 - Direct register assignment (PORTB = value) sets multiple LEDs efficiently
 - 100ms loop interval provides responsive button checking while keeping timing simple
+- Helper macros (CLEAR_BIT, SET_BIT) from common/avr_io.h simplify bit manipulation
 
 ## Troubleshooting
 

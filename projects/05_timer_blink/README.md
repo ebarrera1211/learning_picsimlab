@@ -17,6 +17,7 @@ Learn to use hardware timers and interrupts for non-blocking LED blinking, repla
 - Volatile variables for shared data
 - Non-blocking programming
 - Timer overflow frequency calculation
+- Overflow counting for precise timing
 
 ## How to Build
 ```bash
@@ -33,7 +34,7 @@ make
 6. In main window: File → Load Hex → select main.hex
 7. Tools → Arduino Bootloader
 8. Click Run button
-9. LED blinks at approximately 1 Hz (timing depends on prescaler and overflow count)
+9. LED blinks at 1 Hz (500ms on, 500ms off)
 
 ## Code Explanation
 
@@ -44,26 +45,32 @@ make
 - Required for interrupt-related functions and macros
 - Provides `sei()`, `cli()`, and `ISR()` macro
 
-### Volatile Global Variable
+### Volatile Global Variables
 ```c
 volatile uint8_t timer_flag = 0;
+volatile uint8_t overflow_count = 0;
 ```
-- `volatile` keyword tells compiler variable can change unexpectedly
+- `volatile` keyword tells compiler variables can change unexpectedly
 - Prevents compiler from caching or optimizing away reads
 - Critical for variables shared between ISR and main loop
-- Without volatile, compiler might remove the check thinking it never changes
+- `timer_flag` is set when 30 overflows occur (~500ms)
+- `overflow_count` counts individual overflows
 
 ### Interrupt Service Routine (ISR)
 ```c
 ISR(TIMER0_OVF_vect) {
-    timer_flag = 1;
+    overflow_count++;
+    if (overflow_count >= 30) {  // 30 overflows = ~500ms
+        overflow_count = 0;
+        timer_flag = 1;
+    }
 }
 ```
 - `ISR()` declares an Interrupt Service Routine
 - `TIMER0_OVF_vect` is the vector name for Timer0 overflow interrupt
 - Called automatically when Timer0 overflows (255 → 0)
-- Sets flag to notify main loop
-- Must be as short as possible (avoid long delays or complex logic)
+- Counts overflows and sets flag after 30 overflows
+- Must be as short as possible (avoids blocking)
 
 ### Timer Configuration
 ```c
@@ -75,31 +82,28 @@ TIMSK0 = (1 << TOIE0);  // Enable Timer0 overflow interrupt
 **TCCR0A (Timer/Counter Control Register A)**:
 - Set to 0 for "Normal mode"
 - Timer counts 0 → 255, then overflows to 0
-- Other modes: CTC (Clear Timer on Compare), PWM modes
 
 **TCCR0B (Timer/Counter Control Register B)**:
-- Controls prescaler via CS02, CS01, CS00 bits
-- Prescaler divides CPU clock before reaching timer
-- Prescaler = 1024: timer clock = 16MHz / 1024 = 15.625 kHz
-- Slows down timer for practical timing
+- `CS02` and `CS00` bits set = prescaler 1024
+- Timer clock = 16MHz / 1024 = 15.625 kHz
+- Overflow frequency = 15,625 / 256 = 61 Hz
+- Overflow period = 1 / 61 = 16.4 ms
 
 **TIMSK0 (Timer Interrupt Mask Register)**:
 - `TOIE0` bit enables Timer0 overflow interrupt
 - When timer overflows, ISR is called automatically
 
-### Timer Frequency Calculation
+### Timer Calculation
 ```
 CPU Clock: 16 MHz
 Prescaler: 1024
 Timer Clock: 16,000,000 / 1024 = 15,625 Hz
-Timer Range: 0-255 (256 counts)
 Overflow Frequency: 15,625 / 256 = 61 Hz
 Overflow Period: 1 / 61 = 16.4 ms
-```
 
-To get 500ms (0.5s) for LED toggle:
-- Need 500ms / 16.4ms ≈ 30 overflows
-- Count overflows in ISR and set flag after 30
+For 500ms toggle:
+30 overflows × 16.4 ms = 492 ms ≈ 500ms
+```
 
 ### Enable Global Interrupts
 ```c
@@ -107,7 +111,6 @@ sei();  // Set Enable Interrupts
 ```
 - Must be called after configuring individual interrupts
 - Without this, no interrupts will fire
-- Enables global interrupt flag in status register
 
 ### Main Loop with Non-Blocking Check
 ```c
@@ -125,12 +128,19 @@ while (1) {
 - Immediately continues (no blocking delay)
 - Can add other tasks in the loop
 
+### Helper Header
+```c
+#include "../common/avr_io.h"
+```
+- Uses helper header for LED_PIN definition
+- Provides convenience macros (though not used in this implementation)
+
 ## Blocking vs Non-Blocking Comparison
 
 **Project 1 (Blocking)**:
 ```c
 PORTB |= (1 << LED_PIN);
-_delay_ms(500);  // CPU blocked for 500ms, can't do anything else
+_delay_ms(500);  // CPU blocked for 500ms
 PORTB &= ~(1 << LED_PIN);
 _delay_ms(500);  // CPU blocked again
 ```
@@ -141,7 +151,7 @@ while (1) {
     if (timer_flag) {
         // Toggle LED (microseconds)
     }
-    // CPU free to check buttons, read sensors, update display, etc.
+    // CPU free to check buttons, read sensors, etc.
 }
 ```
 
@@ -169,7 +179,7 @@ while (1) {
 - Non-blocking programming allows multitasking
 - `sei()` enables global interrupts (must be called)
 - Timer overflow occurs automatically when counter reaches limit
-- Interrupts have priority and can interrupt main code at any time
+- Overflow counting allows precise timing beyond single overflow period
 - ISRs should be short and fast
 - This is foundation for all timing-critical embedded code
 
@@ -179,16 +189,16 @@ while (1) {
 - Verify `sei()` was called (enables interrupts)
 - Check TIMSK0 has TOIE0 bit set
 - Ensure Tools → Arduino Bootloader was run
-- Check that overflow counter reaches threshold
+- Check that overflow_count reaches 30
 
 ### LED blinks too fast
+- Increase overflow_count threshold (currently 30)
 - Increase prescaler (use 1024 instead of 256)
-- Increase overflow count threshold
-- Check overflow counter logic in ISR
+- Verify CPU clock is 16MHz in PicsimLab
 
 ### LED blinks too slow
+- Decrease overflow_count threshold
 - Decrease prescaler
-- Decrease overflow count threshold
 - Verify CPU clock is 16MHz in PicsimLab
 
 ### Nothing happens

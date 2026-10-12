@@ -16,6 +16,7 @@ Learn to read digital input from a push button, implement software debouncing, a
 - Software debouncing
 - State management (last_button_state, led_state)
 - Operator precedence in C (bitwise & vs comparison ==)
+- Edge detection (falling edge)
 
 ## How to Build
 ```bash
@@ -99,6 +100,15 @@ led_state = !led_state;  // Toggle between 0 and 1
 - Toggles LED state on each button press
 - `!` is logical NOT operator
 
+### State Tracking
+```c
+last_button_state = current_button_state;
+_delay_ms(10);  // Small delay to prevent rapid checking
+```
+- Tracks previous button state for edge detection
+- 10ms delay prevents excessive CPU usage
+- In PicsimLab, may not be necessary but good practice
+
 ## Learnings
 
 - PIN register reads input states (different from PORT for output)
@@ -112,6 +122,7 @@ led_state = !led_state;  // Toggle between 0 and 1
 - State management tracks previous values to detect changes
 - PicsimLab buttons can be configured as active-low or active-high
 - In real hardware, pull-up is essential; PicsimLab can simulate either
+- Uses common/avr_io.h helper header for BUTTON_PIN definition
 
 ## Troubleshooting
 

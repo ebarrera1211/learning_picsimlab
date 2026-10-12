@@ -16,7 +16,7 @@ Learn to use external interrupts for event-driven programming, implement button-
 - Falling edge vs rising edge triggering
 - Interrupt priority and nesting
 - Volatile variables for interrupt safety
-- Debouncing in interrupt context
+- Debouncing in interrupt context with disable/enable pattern
 - Event-driven vs polling programming
 
 ## How to Build
@@ -65,8 +65,7 @@ ISR(INT0_vect) {
     } else {
         PORTB &= ~(1 << LED_PIN);
     }
-    
-    // Set debounce counter (50 x 10ms = 500ms)
+    // Set debounce counter (50 x 10ms = 0.5s)
     debounce_counter = 50;
 }
 ```
@@ -75,6 +74,7 @@ ISR(INT0_vect) {
 - Immediately disables INT0 to prevent bounce from queuing more interrupts
 - Toggles LED state
 - Sets debounce counter for main loop to re-enable interrupt later
+- Uses 500ms debounce period (50 × 10ms)
 
 ### External Interrupt Configuration
 ```c
@@ -166,7 +166,7 @@ while (1) {
 - When an ISR runs, global interrupts are disabled by default
 - ISRs should be short and fast
 - Avoid long delays or complex logic in ISRs
-- Use volatile for shared variables
+- Use volatile for shared data
 - Be careful with shared data access
 
 ## Learnings
@@ -184,6 +184,7 @@ while (1) {
 - ISRs should be short (delegation pattern)
 - Interrupts provide immediate response regardless of main loop
 - This pattern is used for real-time event handling in embedded systems
+- Debounce period of 500ms (50 × 10ms) provides good stability
 
 ## Troubleshooting
 
