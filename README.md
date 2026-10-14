@@ -70,41 +70,6 @@ This will build all dependencies (picsim, lxrad, simavr, etc.) and install PICSi
 picsimlab
 ```
 
-## Repository Structure
-
-```
-learning_picsimlab/
-├── README.md                 # This file
-├── common/                   # Shared files (optional)
-│   ├── Makefile.template
-│   └── avr_io.h
-└── projects/                 # Individual project directories
-    ├── 01_blink/
-    │   ├── main.c
-    │   ├── Makefile
-    │   ├── README.md        # Project-specific documentation
-    │   └── 01_blink.pzw     # PicsimLab workspace file
-    ├── 02_multiple_leds/
-    │   ├── main.c
-    │   ├── Makefile
-    │   ├── README.md
-    │   └── 02_multiple_leds.pzw
-    ├── 03_button/
-    │   ├── main.c
-    │   ├── Makefile
-    │   ├── README.md
-    │   └── 03_button.pzw
-    ├── 04_traffic_light/
-    │   ├── main.c
-    │   ├── Makefile
-    │   ├── README.md
-    │   └── 04_traffic_light.pzw
-    └── 05_timer_blink/
-        ├── main.c
-        ├── Makefile
-        ├── README.md
-        └── 05_timer_blink.pzw
-```
 
 ## How to Run Each Project
 
@@ -121,7 +86,7 @@ For each project, follow these steps:
    ```bash
    make
    ```
-   This compiles `main.c` and generates `main.hex`.
+   This compiles `main.c` and generates `main.hex`. If no changes to .c from source, use .hex included in repo.
 
 3. **Open PICSimLab**
    ```bash
@@ -138,17 +103,14 @@ For each project, follow these steps:
 
 5. **Initialize Bootloader (Arduino Uno)**
    - In PICSimLab main window: `Tools` → `Arduino Bootloader`
-   - This step is required for Arduino Uno boards to execute firmware
+   - This step sets the Arduino Uno in a state ready to upload firmware.
+   - Click `File` → `Load Hex` and load the firmware .hex file for the project 
 
-6. **Run the Simulation**
-   - Click the `Run` button (green triangle) in the main window
-   - The simulation will start and the firmware will execute
-
-7. **Observe Behavior**
+6. **Observe Behavior**
    - LEDs will blink, buttons will respond, etc.
    - Use `Tools` → `Pin Viewer` to inspect pin states for debugging
 
-8. **Save Workspace (Optional)**
+7. **Save Workspace (Optional)**
    - If you make hardware configuration changes:
    - `File` → `Save Workspace` to update the `.pzw` file
 
@@ -161,6 +123,9 @@ Each project has its own `README.md` file with detailed information:
 - **Project 3**: [03_button/README.md](projects/03_button/README.md) - Digital input and button debouncing
 - **Project 4**: [04_traffic_light/README.md](projects/04_traffic_light/README.md) - State machines and non-blocking timing
 - **Project 5**: [05_timer_blink/README.md](projects/05_timer_blink/README.md) - Hardware timers and interrupts
+- **Project 6**: [06_pwm/README.md](projects/06_pwm/README.md) - Configure Pulse Width Modulation
+- **Project 7**: [07_external_interrupt/README.md](projects/07_external_interrupt/README.md) - Setup interrupt and use ISR()
+- **Project 8**: [08_timer_interrupt/README.md](projects/08_timer_interrupt/README.md) - Use interrupt to setup counter based on timer and use button to reset counter
 
 **Refer to each project's README.md for:**
 - Hardware configuration details
