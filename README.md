@@ -126,6 +126,7 @@ Each project has its own `README.md` file with detailed information:
 - **Project 6**: [06_pwm/README.md](projects/06_pwm/README.md) - Configure Pulse Width Modulation
 - **Project 7**: [07_external_interrupt/README.md](projects/07_external_interrupt/README.md) - Setup interrupt and use ISR()
 - **Project 8**: [08_timer_interrupt/README.md](projects/08_timer_interrupt/README.md) - Use interrupt to setup counter based on timer and use button to reset counter
+- **Project 9**: [09_uart_basics/README.md](projects/09_uart_basics/README.md) - UART communication, string formatting, and interactive input
 
 **Refer to each project's README.md for:**
 - Hardware configuration details
