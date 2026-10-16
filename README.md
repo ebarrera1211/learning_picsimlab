@@ -128,6 +128,7 @@ Each project has its own `README.md` file with detailed information:
 - **Project 8**: [08_timer_interrupt/README.md](projects/08_timer_interrupt/README.md) - Use interrupt to setup counter based on timer and use button to reset counter
 - **Project 9**: [09_uart_basics/README.md](projects/09_uart_basics/README.md) - UART communication, string formatting, and interactive input
 - **Project 10**: [10_serial_commands/README.md](projects/10_serial_commands/README.md) - Command interpreter, string parsing, and LED control via serial
+- **Project 11**: [11_serial_logging/README.md](projects/11_serial_logging/README.md) - Data logging with timestamps, CSV format, and event recording
 
 **Refer to each project's README.md for:**
 - Hardware configuration details
