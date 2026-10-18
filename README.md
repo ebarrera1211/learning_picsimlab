@@ -129,6 +129,7 @@ Each project has its own `README.md` file with detailed information:
 - **Project 9**: [09_uart_basics/README.md](projects/09_uart_basics/README.md) - UART communication, string formatting, and interactive input
 - **Project 10**: [10_serial_commands/README.md](projects/10_serial_commands/README.md) - Command interpreter, string parsing, and LED control via serial
 - **Project 11**: [11_serial_logging/README.md](projects/11_serial_logging/README.md) - Data logging with timestamps, CSV format, and event recording
+- **Project 12**: [12_potentiometer/README.md](projects/12_potentiometer/README.md) - ADC reading, voltage conversion, and analog input
 
 **Refer to each project's README.md for:**
 - Hardware configuration details
