@@ -130,6 +130,7 @@ Each project has its own `README.md` file with detailed information:
 - **Project 10**: [10_serial_commands/README.md](projects/10_serial_commands/README.md) - Command interpreter, string parsing, and LED control via serial
 - **Project 11**: [11_serial_logging/README.md](projects/11_serial_logging/README.md) - Data logging with timestamps, CSV format, and event recording
 - **Project 12**: [12_potentiometer/README.md](projects/12_potentiometer/README.md) - ADC reading, voltage conversion, and analog input
+- **Project 13**: [13_analog_led/README.md](projects/13_analog_led/README.md) - ADC to PWM mapping, analog control, and integer overflow handling
 
 **Refer to each project's README.md for:**
 - Hardware configuration details
