@@ -133,6 +133,7 @@ Each project has its own `README.md` file with detailed information:
 - **Project 13**: [13_analog_led/README.md](projects/13_analog_led/README.md) - ADC to PWM mapping, analog control, and integer overflow handling
 - **Project 14**: [14_temp_sensor/README.md](projects/14_temp_sensor/README.md) - Temperature sensor reading, conversion, and threshold LED indicators
 - **Project 15**: [15_light_sensor/README.md](projects/15_light_sensor/README.md) - LDR light sensor, hysteresis, and automatic light control
+- **Project 16**: [16_i2c_scanner/README.md](projects/16_i2c_scanner/README.md) - I2C/TWI protocol, device scanning, and address discovery
 
 **Refer to each project's README.md for:**
 - Hardware configuration details

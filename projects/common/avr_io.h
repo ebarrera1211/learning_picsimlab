@@ -57,4 +57,10 @@ void uart_print_number(uint16_t num) {
 	}
 }
 
+void uart_print_hex(uint8_t num) {
+	char hex[] = "0123456789ABCDEF";
+	uart_transmit(hex[num >> 4]);
+	uart_transmit(hex[num & 0x0F]);
+}
+
 #endif // AVR_IO_H
