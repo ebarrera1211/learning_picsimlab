@@ -134,6 +134,7 @@ Each project has its own `README.md` file with detailed information:
 - **Project 14**: [14_temp_sensor/README.md](projects/14_temp_sensor/README.md) - Temperature sensor reading, conversion, and threshold LED indicators
 - **Project 15**: [15_light_sensor/README.md](projects/15_light_sensor/README.md) - LDR light sensor, hysteresis, and automatic light control
 - **Project 16**: [16_i2c_scanner/README.md](projects/16_i2c_scanner/README.md) - I2C/TWI protocol, device scanning, and address discovery
+- **Project 17**: [17_oled_display/README.md](projects/17_oled_display/README.md) - SSD1306 OLED display initialization, text rendering, and horizontal addressing mode
 
 **Refer to each project's README.md for:**
 - Hardware configuration details

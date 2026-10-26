@@ -24,6 +24,7 @@ void uart_init(void) {
 	UBRR0L = UBRR_VALUE;
 	UCSR0B = (1 << TXEN0) | (1 << RXEN0);
 	UCSR0C = (1 << UCSZ01) | (1 << UCSZ00);
+	_delay_ms(100);
 }
 
 void uart_transmit(char data) {
